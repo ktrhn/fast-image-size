@@ -199,7 +199,12 @@ class FastImageSize
 	{
 		if (empty($this->data))
 		{
-			$this->data = @file_get_contents($filename, null, null, $offset, $length);
+			$opts = array('http' => array(
+        			'follow_location' => 1,
+        			'max_redirects' => 20
+    			));
+			$context = stream_context_create($opts);
+			$this->data = @file_get_contents($filename, false, $context, $offset, $length);
 		}
 
 		// Force length to expected one. Return false if data length
